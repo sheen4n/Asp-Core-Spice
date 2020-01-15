@@ -1,0 +1,71 @@
+﻿@model Coupon
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<br />
+<h2 class="text-info">Delete Coupon</h2>
+<br />
+<form method="post" asp-action="Delete">
+    <div class="border backgroundWhite row">
+        <div class="col-8 border-right">
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Name" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <input disabled asp-for="Name" class="form-control" />
+                </div>
+
+            </div>
+
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="CouponType" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <select disabled asp-for="CouponType" class="form-control" asp-items="Html.GetEnumSelectList<Coupon.ECouponType>()"></select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Discount" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <input disabled asp-for="Discount" class="form-control" />
+                </div>
+
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="MinimumAmount" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <input disabled asp-for="MinimumAmount" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="IsActive" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <input disabled asp-for="IsActive" type="checkbox" style="width: 20px; height: 20px;" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-8 offset-4">
+                    <partial name="_DeleteAndBackToListButton" model="@Model.Id"/>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-3 offset-1">
+            @if (Model.Picture != null)
+            {
+                <img alt="" src="data:image/png;base64,@Convert.ToBase64String(Model.Picture)" width="100%" style="border-radius: 5px; border: 1px solid #bbb9b9;" />
+            }
+        </div>
+    </div>
+
+</form>

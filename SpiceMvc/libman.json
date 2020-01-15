@@ -1,0 +1,22 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "jqueryui@1.12.1",
+      "destination": "wwwroot/lib/jqueryui/",
+      "files": [
+        "jquery-ui.min.js",
+        "jquery-ui.min.css"
+      ]
+    },
+    {
+      "library": "timepicker@1.3.5",
+      "destination": "wwwroot/lib/timepicker/",
+      "files": [
+        "jquery.timepicker.min.js",
+        "jquery.timepicker.min.css"
+      ]
+    }
+  ]
+}

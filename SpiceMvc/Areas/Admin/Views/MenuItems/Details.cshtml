@@ -1,0 +1,116 @@
+﻿@using SpiceMvc.Extensions
+@model SpiceMvc.ViewModels.MenuItemFormViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<br />
+<h2 class="text-info">Menu Item Details</h2>
+<br />
+<div class="border backgroundWhite row">
+    <div class="col-8">
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="MenuItem.Name" class="col-form-label"></label>
+            </div>
+            <div class="col-8">
+                <input asp-for="MenuItem.Name" class="form-control" readonly />
+
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="MenuItem.Description" class="col-form-label"></label>
+            </div>
+            <div class="col-8">
+                <textarea asp-for="MenuItem.Description" class="form-control" readonly></textarea>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="MenuItem.Price" class="col-form-label"></label>
+            </div>
+            <div class="col-8">
+                <input asp-for="MenuItem.Price" class="form-control" readonly />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="MenuItem.CategoryId" class="col-form-label"></label>
+            </div>
+            <div class="col-8">
+                <select id="ddlCategoryList" asp-for="MenuItem.CategoryId" asp-items="@Model.Categories.ToSelectListItem(Model.MenuItem.CategoryId)" class="form-control" disabled></select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="MenuItem.SubCategoryId" class="col-form-label"></label>
+            </div>
+            <div class="col-8">
+                <select name="SubCategoryId" id="ddlSubCategoryList" asp-for="MenuItem.SubCategoryId" asp-items="@(new SelectList(string.Empty, "Id", "Name"))" class="form-control" disabled></select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="MenuItem.Spicyness" class="col-form-label"></label>
+            </div>
+            <div class="col-8">
+                <select asp-for="MenuItem.Spicyness" asp-items="Html.GetEnumSelectList<MenuItem.ESpicy>()" class="form-control" disabled></select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-8 offset-4">
+                <div class="row">
+                    <div class="col-6"><a asp-action="Edit" class="btn btn-info form-control" asp-route-id="@Model.MenuItem.Id">Edit</a></div>
+                    <div class="col-6"><a asp-action="Index" class="btn btn-success form-control">Back to List</a></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-3 offset-1">
+        <img alt="" src="@Model.MenuItem.Image" width="100%" style="border-radius: 5px; border: 1px solid #bbb9b9; " />
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
+    <script>
+
+        getSubCategoryList = async () => {
+            const categoryId = $("#ddlCategoryList").val();
+
+            await $.ajax({
+                url: `/Admin/SubCategories/Categories/${categoryId}`,
+                type: 'GET',
+                dataType: 'text',
+                success: function(data) {
+                    const results = JSON.parse(data);
+                    $("#ddlSubCategoryList").empty();
+                    let items;
+                    $.each(results,
+                        (i, subCategory) => {
+                            items += `<option value=${subCategory.value}>${subCategory.text}</option>`;
+                        });
+                    $("#ddlSubCategoryList").html(items);
+                }
+            });
+        };
+
+        $(document).ready(
+            async () => {
+                await getSubCategoryList();
+                $("#ddlSubCategoryList").val(@Model.MenuItem.SubCategory.Id);
+
+            }
+        );
+    </script>
+}

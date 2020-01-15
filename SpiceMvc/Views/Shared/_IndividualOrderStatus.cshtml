@@ -1,0 +1,27 @@
+﻿@using SpiceMvc.Utility
+@model string
+
+@{
+
+    string imageLink;
+    switch (Model)
+    {
+        case SD.StatusSubmitted:
+            imageLink = "/images/OrderPlaced.png";
+            break;
+        case SD.StatusInProcess:
+            imageLink = "/images/InKitchen.png";
+            break;
+        case SD.StatusReady:
+            imageLink = "/images/ReadyForPickup.png";
+            break;
+        case SD.StatusCompleted:
+            imageLink = "/images/Completed.png";
+            break;
+        default:
+            imageLink = "";
+            break;
+
+    }
+    <img src="@imageLink" style="max-width: 100%;" alt="" />
+}

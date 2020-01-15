@@ -1,0 +1,63 @@
+﻿@model IEnumerable<ApplicationUser>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<br />
+
+<div class="border backgroundWhite">
+    <div class="row">
+        <div class="col-6">
+            <h2 class="text-info">Users List</h2>
+        </div>
+        <div class="col-6 text-right">
+            <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-info"><i class="fas fa-plus"></i> &nbsp; New Employee Registration</a>
+        </div>
+    </div>
+    <br />
+
+    <div>
+        @if (Model.Any())
+        {
+            <table class="table table-striped border">
+                <tr class="table-secondary">
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th></th>
+                </tr>
+
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>@user.Name</td>
+                        <td>@user.Email</td>
+                        <td>@user.PhoneNumber</td>
+                        <td>
+                            @if (user.LockoutEnd == null || user.LockoutEnd < DateTime.Now)
+                            {
+                                <a  class="btn btn-success text-white" asp-action="Lock" asp-route-id="@user.Id">
+                                    <i class="fas fa-lock-open"></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <a  class="btn btn-danger text-white" asp-action="Unlock" asp-route-id="@user.Id">
+                                    <i class="fas fa-lock"></i>
+                                </a>
+                            }
+
+                        </td>
+                    </tr>
+                }
+            </table>
+        }
+        else
+        {
+            <p> No Users Exist</p>
+        }
+
+    </div>
+
+</div>

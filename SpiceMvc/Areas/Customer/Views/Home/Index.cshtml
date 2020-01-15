@@ -1,0 +1,63 @@
+﻿@model SpiceMvc.ViewModels.IndexViewModel
+
+<br />
+
+@if (Model.Coupons.ToList().Count > 0)
+{
+    <div style="display: flex;">
+        <div class="carousel" data-ride="carousel" data-interval="2500">
+            @for (var i = 0; i < Model.Coupons.Count(); i++)
+            {
+                var classToAdd = i == 0 ? "active" : "";
+                <div class="@classToAdd carousel-item">
+                    <img src="data:image/png;base64,@Convert.ToBase64String(Model.Coupons.ToList()[i].Picture)" alt="" style="max-width: 100%" />
+                </div>
+            }
+        </div>
+    </div>
+}
+
+<br />
+<br />
+
+<div class="backgroundWhite">
+    <ul id="menu-filters" class="menu-filter-list list-inline text-center">
+        <li class="active btn btn-secondary ml-1 mr-1" data-filter=".menu-restaurant">Show All</li>
+        @foreach (var item in Model.Categories)
+        {
+            <li class="ml-1 mr-1 btn" data-filter=".@item.Name.Replace(" ",string.Empty)">@item.Name</li>
+        }
+    </ul>
+
+
+    @foreach (var category in Model.Categories)
+    {
+        <div class="row" id="menu-wrapper">
+            <partial name="_ThumbnailAreaPartial" model="@Model.MenuItems.Where(m => m.CategoryId.Equals(category.Id))" />
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        var posts = $(".post");
+        (() => {
+            $("#menu-filters li").click(function() {
+                $("#menu-filters li").removeClass("active btn btn-secondary");
+                $(this).addClass("active btn btn-secondary");
+
+                var selectedFilter = $(this).data("filter");
+                console.log(selectedFilter, $(this));
+
+                $(".menu-restaurant").fadeOut();
+
+                setTimeout(() => {
+                        $(selectedFilter).slideDown();
+                    },
+                    300);
+            });
+        })();
+    </script>
+}
+
+

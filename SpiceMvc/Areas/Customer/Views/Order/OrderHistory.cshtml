@@ -1,0 +1,157 @@
+﻿@using SpiceMvc.Utility
+@model SpiceMvc.ViewModels.OrderListViewModel
+
+@{
+    ViewData["Title"] = "Order History";
+}
+
+<br />
+
+<div class="border backgroundWhite">
+    <div class="row container">
+        <h2 class="text-info">Orders List</h2>
+    </div>
+    <br />
+
+    <div>
+        @if (Model.Orders.Any())
+        {
+            <table class="table table-striped border">
+                <tr class="table-secondary">
+                    <th>Order ID</th>
+                    <th>Pickup Name</th>
+                    <th>User Email</th>
+                    <th>Pickup Time</th>
+                    <th>Order Total</th>
+                    <th>Total Items</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model.Orders)
+                {
+                    <tr>
+                        <td>@item.OrderHeader.Id</td>
+                        <td>@item.OrderHeader.PickupName</td>
+                        <td>@item.OrderHeader.ApplicationUser.Email</td>
+                        <td>@item.OrderHeader.PickupTime</td>
+                        <td>@item.OrderHeader.OrderTotal</td>
+                        <td>@item.OrderDetails.Count</td>
+                        <td>
+                            <button type="submit" class="btn btn-success anchorDetail" data-id="@item.OrderHeader.Id" data-toggle="modal">
+                                <i class="far fa-list-alt"></i> Details
+                            </button>
+                        </td>
+                        <td>
+                            @if (item.OrderHeader.Status != SD.StatusCancelled)
+                            {
+                                <button type="submit" class="btn btn-info checkStatus" data-id="@item.OrderHeader.Id" data-toggle="modal">
+                                    <i class="far fa-clock"></i> Status
+                                </button>
+                            }
+                            else
+                            {
+                                <button class="btn btn-danger">
+                                    <i class="far fa-clock"></i> Cancelled
+                                </button>
+                            }
+                        </td>
+                    </tr>
+                }
+            </table>
+            <div page-model="@Model.PagingInfo" page-classes-enabled="true" page-class="btn border"
+                 page-class-normal="btn btn-light" page-class-selected="btn btn-info active"
+                 class="btn-group float-right">
+            </div>
+            <br />
+        }
+        else
+        {
+            <p> No Orders Exist</p>
+        }
+
+    </div>
+
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="max-width: 70% !important;">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-light justify-content-center">
+                <h5 class="modal-title">Order Details</h5>
+            </div>
+            <div class="modal-body justify-content-center" id="myModalContent">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" style="width:20%" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalStatus" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="max-width: 70% !important;">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-light justify-content-center">
+                <h5 class="modal-title">Order Status</h5>
+            </div>
+            <div class="modal-body justify-content-center" id="modalStatusContent">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" style="width:20%" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        var PostBackURL = '/Customer/Order/GetOrderDetails';
+        var StatusCheckURL = '/Customer/Order/GetOrderStatus';
+
+        $(() => {
+            $(".anchorDetail").click(function () {
+                const button = $(this);
+                const id = button.attr("data-id");
+
+                $.ajax({
+                    url: PostBackURL,
+                    contentType: "application/json; charset=utf-8",
+                    type: 'GET',
+                    data: { "id": id },
+                    cache: false,
+                    success: function (data) {
+                        $("#myModalContent").html(data);
+                        $("#myModal").modal("show");
+                    },
+                    error: function () {
+                        alert("Dynamic Content Loading Failed");
+                    }
+                });
+            });
+
+            $(".checkStatus").click(function () {
+                const button = $(this);
+                const id = button.attr("data-id");
+
+                $.ajax({
+                    url: StatusCheckURL,
+                    contentType: "application/json; charset=utf-8",
+                    type: 'GET',
+                    data: { "id": id },
+                    cache: false,
+                    success: function (data) {
+                        $("#modalStatusContent").html(data);
+                        $("#modalStatus").modal("show");
+                    },
+                    error: function () {
+                        alert("Dynamic Content Loading Failed");
+                    }
+                });
+            });
+        });
+    </script>
+
+}

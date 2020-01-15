@@ -1,0 +1,46 @@
+﻿@model IEnumerable<Category>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<br />
+
+<div class="border backgroundWhite">
+    <div class="row">
+        <div class="col-6">
+            <h2 class="text-info">Category List</h2>
+        </div>
+        <div class="col-6 text-right">
+            <partial name="_CreateButtonPartial"/>
+        </div>
+    </div>
+    <br />
+
+    <div>
+        @if (Model.Any())
+        {
+            <table class="table table-striped border">
+                <tr class="table-secondary">
+                    <th>Name</th>
+                    <th></th>
+                </tr>
+
+                @foreach (var category in Model)
+                {
+                    <tr>
+                        <td>@category.Name</td>
+                        <partial name="_TableButtonPartial" model="@category.Id"/>
+
+                    </tr>
+                }
+            </table>
+        }
+        else
+        {
+            <p> No Categories Exist</p>
+        }
+
+    </div>
+
+</div>
