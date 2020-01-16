@@ -61,8 +61,8 @@ namespace SpiceMvc
 
             services.AddAuthentication().AddFacebook(faceBookOptions =>
             {
-                faceBookOptions.AppId = "829842760778597";
-                faceBookOptions.AppSecret = "21fdb8daf33f920cb24c4c9b495a627f";
+                faceBookOptions.AppId = "";
+                faceBookOptions.AppSecret = "";
             });
 
             services.AddScoped<IDbInitializer, DbInitializer>();
