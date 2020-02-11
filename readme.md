@@ -2,7 +2,7 @@
 
 A Project that is built using ASP.NET CORE.
 
-This is an example af an ASP.NET CORE 3.0 application, following the tutorial of Bhrugen Patel.
+This is an example of an ASP.NET CORE 3.0 application, following the tutorial of Bhrugen Patel.
 
 
 ## How to run the project
